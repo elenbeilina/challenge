@@ -1,0 +1,9 @@
+{
+  "name": "rest-sink",
+  "config": {
+    "connector.class": "org.app.connector.RestSinkConnector",
+    "tasks.max": "1",
+    "topics": "main",
+    "api.uri": "https://endady3jioi9dzu.m.pipedream.net"
+  }
+}

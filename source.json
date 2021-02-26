@@ -1,0 +1,8 @@
+{
+  "name": "random-string-source",
+  "config": {
+    "connector.class": "org.app.connector.RandomSourceConnector",
+    "tasks.max": "1",
+    "topic": "main"
+  }
+}
