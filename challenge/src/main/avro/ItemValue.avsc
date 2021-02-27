@@ -1,0 +1,11 @@
+{
+  "namespace": "org.app.connector",
+  "name": "ItemValue",
+  "type": "record",
+  "fields": [
+    {
+      "name": "value",
+      "type": "string"
+    }
+  ]
+}

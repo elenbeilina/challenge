@@ -13,7 +13,7 @@
         <kafka.version>2.7.0</kafka.version>
         <avro.version>1.10.1</avro.version>
         <lombok.version>1.18.16</lombok.version>
-        <confluent.version>5.3.0</confluent.version>
+        <converter.version>6.1.0</converter.version>
     </properties>
 
     <repositories>
@@ -52,8 +52,15 @@
         </dependency>
         <dependency>
             <groupId>io.confluent</groupId>
-            <artifactId>kafka-avro-serializer</artifactId>
-            <version>${confluent.version}</version>
+            <artifactId>kafka-connect-avro-converter</artifactId>
+            <version>${converter.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -87,6 +94,25 @@
                         <goals>
                             <goal>single</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>${avro.version}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>src/main/avro</sourceDirectory>
+                            <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
+                            <stringType>String</stringType>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
