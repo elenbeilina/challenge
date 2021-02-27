@@ -2,16 +2,20 @@ package org.app.connector;
 
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;
-import org.apache.kafka.common.config.ConfigDef.Importance;
-import org.apache.kafka.common.config.ConfigDef.Type;
 
 import java.util.Map;
 
+import static org.apache.kafka.common.config.ConfigDef.Importance.HIGH;
+
 public class RandomSourceConnectorConfig extends AbstractConfig {
 
-    // TODO: topic property and its documentation goes here
+    public static final String TOPIC_CONFIG = "topic";
+    private static final String TOPIC_DEFAULT = "star-trek";
+    private static final String TOPIC_DOC = "Topic for publishing Star Trek characters.";
 
-    // TODO If needed your getters goes here
+    public static final String INTERVAL = "interval";
+    private static final int INTERVAL_DEFAULT = 1000;
+    private static final String INTERVAL_DOC = "Interval in milliseconds.";
 
     public RandomSourceConnectorConfig(ConfigDef config, Map<String, String> parsedConfig) {
         super(config, parsedConfig);
@@ -23,7 +27,8 @@ public class RandomSourceConnectorConfig extends AbstractConfig {
 
     public static ConfigDef conf() {
         return new ConfigDef()
-            // TODO Attache your config to ConfigDef
-            ;
+                .define(TOPIC_CONFIG, ConfigDef.Type.STRING, TOPIC_DEFAULT, new ConfigDef.NonEmptyStringWithoutControlChars(), HIGH, TOPIC_DOC)
+                .define(INTERVAL, ConfigDef.Type.INT, INTERVAL_DEFAULT, ConfigDef.Importance.LOW, INTERVAL_DOC)
+                ;
     }
 }
