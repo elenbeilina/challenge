@@ -1,16 +1,15 @@
 package org.app.connector;
 
 import com.github.javafaker.Faker;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.connect.data.SchemaAndValue;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.lang.System.currentTimeMillis;
 import static org.app.connector.RandomSourceConnectorConfig.INTERVAL;
@@ -21,9 +20,6 @@ public class RandomSourceTask extends SourceTask {
 
     public RandomSourceConnectorConfig config;
     private Faker faker;
-
-    private long lastExecution;
-    private List<ItemValue> values;
 
     public String version() {
         return RandomSourceConnector.VERSION;
@@ -36,25 +32,17 @@ public class RandomSourceTask extends SourceTask {
     public void start(Map<String, String> props) {
         config = new RandomSourceConnectorConfig(props);
         faker = new Faker();
-        values = new ArrayList<>();
     }
 
+    @SneakyThrows
     public List<SourceRecord> poll() {
-        ItemValue value = ItemValue.newBuilder().setValue(faker.starTrek().character()).build();
-        values.add(value);
+        SourceRecord sourceRecord = buildSourceRecord(ItemValue.newBuilder()
+                .setValue(faker.starTrek().character())
+                .build());
 
-        if (System.currentTimeMillis() > (lastExecution + config.getInt(INTERVAL))) {
-            lastExecution = System.currentTimeMillis();
+        Thread.sleep(config.getInt(INTERVAL));
 
-            List<SourceRecord> sourceRecords = values.stream()
-                    .map(this::buildSourceRecord)
-                    .collect(Collectors.toList());
-
-            values = new ArrayList<>();
-
-            return sourceRecords;
-        }
-        return Collections.emptyList();
+        return Collections.singletonList(sourceRecord);
     }
 
     private SourceRecord buildSourceRecord(ItemValue value) {
@@ -64,7 +52,7 @@ public class RandomSourceTask extends SourceTask {
         SchemaAndValue schemaAndValue = new AvroConverter<ItemValue>().getSchemaAndValue(value);
 
         return new SourceRecord(sourcePartition, sourceOffset, config.getString(TOPIC_CONFIG),
-                schemaAndValue.schema().valueSchema(), value);
+                schemaAndValue.schema(), schemaAndValue.value());
     }
 }
 
