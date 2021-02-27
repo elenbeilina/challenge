@@ -42,6 +42,11 @@ public class RandomSourceConnector extends SourceConnector {
         }
     }
 
+    /**
+     * Method fo defining tasks scale and what configuration each task should have.
+     * @param maxTasks -  how many tasks (workers) needs connector across cluster
+     * @return - a list of a single configuration map, because our connector only scales up to one task
+     */
     public List<Map<String, String>> taskConfigs(int maxTasks) {
         if (maxTasks != 1) {
             log.info("Ignoring maxTasks as there can only be one.");

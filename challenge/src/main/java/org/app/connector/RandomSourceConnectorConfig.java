@@ -25,6 +25,10 @@ public class RandomSourceConnectorConfig extends AbstractConfig {
         this(conf(), parsedConfig);
     }
 
+    /**
+     * Method for generating configuration that is required for source connector.
+     * @return - configuration that manipulates source connector.
+     */
     public static ConfigDef conf() {
         return new ConfigDef()
                 .define(TOPIC_CONFIG, ConfigDef.Type.STRING, TOPIC_DEFAULT,

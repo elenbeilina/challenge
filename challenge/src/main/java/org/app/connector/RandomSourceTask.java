@@ -34,6 +34,12 @@ public class RandomSourceTask extends SourceTask {
         faker = new Faker();
     }
 
+    /**
+     * Kafka is calling that method in loop as quickly as it has capacity for.
+     * Here we should be making the calls to the external system.
+     * This particularly method generates Star Track characters for the Connect framework.
+     * @return - returning a list of SourceRecords.
+     */
     @SneakyThrows
     public List<SourceRecord> poll() {
         SourceRecord sourceRecord = buildSourceRecord(ItemValue.newBuilder()
@@ -45,6 +51,12 @@ public class RandomSourceTask extends SourceTask {
         return Collections.singletonList(sourceRecord);
     }
 
+    /**
+     * Method for building source record using AvroConverter
+     * @see AvroConverter
+     * @param value - Item value, that we want to send to kafka topic
+     * @return - source value
+     */
     private SourceRecord buildSourceRecord(ItemValue value) {
         Map<String, Object> sourceOffset = Collections.singletonMap("timestamp", currentTimeMillis());
         Map<String, Object> sourcePartition = Collections.singletonMap("value", value.getValue());
