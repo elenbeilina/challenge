@@ -6,23 +6,19 @@ import org.apache.kafka.common.config.ConfigDef;
 import java.util.Map;
 
 import static org.apache.kafka.common.config.ConfigDef.Importance.HIGH;
+import static org.apache.kafka.common.config.ConfigDef.Importance.LOW;
 
 public class RandomSourceConnectorConfig extends AbstractConfig {
 
     public static final String TOPIC_CONFIG = "topic";
-    private static final String TOPIC_DEFAULT = "main";
     private static final String TOPIC_DOC = "Topic for publishing Star Trek characters.";
 
     public static final String INTERVAL = "interval";
     private static final int INTERVAL_DEFAULT = 1000;
     private static final String INTERVAL_DOC = "Interval in milliseconds.";
 
-    public RandomSourceConnectorConfig(ConfigDef config, Map<String, String> parsedConfig) {
-        super(config, parsedConfig);
-    }
-
-    public RandomSourceConnectorConfig(Map<String, String> parsedConfig) {
-        this(conf(), parsedConfig);
+    public RandomSourceConnectorConfig(final Map<?, ?> parsedConfig) {
+        super(conf(), parsedConfig);
     }
 
     /**
@@ -31,10 +27,10 @@ public class RandomSourceConnectorConfig extends AbstractConfig {
      */
     public static ConfigDef conf() {
         return new ConfigDef()
-                .define(TOPIC_CONFIG, ConfigDef.Type.STRING, TOPIC_DEFAULT,
-                        new ConfigDef.NonEmptyStringWithoutControlChars(), HIGH, TOPIC_DOC)
+                .define(TOPIC_CONFIG, ConfigDef.Type.STRING, ConfigDef.NO_DEFAULT_VALUE,
+                        HIGH, TOPIC_DOC)
                 .define(INTERVAL, ConfigDef.Type.INT, INTERVAL_DEFAULT,
-                        ConfigDef.Importance.LOW, INTERVAL_DOC)
+                        LOW, INTERVAL_DOC)
                 ;
     }
 }

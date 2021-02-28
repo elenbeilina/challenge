@@ -3,7 +3,6 @@
   "config": {
     "connector.class": "org.app.connector.RandomSourceConnector",
     "tasks.max": "1",
-    "topic": "main",
-    "interval": "10000"
+    "topic": "main"
   }
 }

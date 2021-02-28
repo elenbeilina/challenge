@@ -52,6 +52,5 @@ public class RandomSourceConnector extends SourceConnector {
             log.info("Ignoring maxTasks as there can only be one.");
         }
         return Collections.singletonList(config.originalsStrings());
-
     }
 }
