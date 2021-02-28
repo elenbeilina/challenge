@@ -10,10 +10,10 @@ import static org.apache.kafka.common.config.ConfigDef.Importance.LOW;
 
 public class RandomSourceConnectorConfig extends AbstractConfig {
 
-    public static final String TOPIC_CONFIG = "topic";
+    private static final String TOPIC_CONFIG = "topic";
     private static final String TOPIC_DOC = "Topic for publishing Star Trek characters.";
 
-    public static final String INTERVAL = "interval";
+    private static final String INTERVAL = "interval";
     private static final int INTERVAL_DEFAULT = 1000;
     private static final String INTERVAL_DOC = "Interval in milliseconds.";
 
@@ -23,6 +23,7 @@ public class RandomSourceConnectorConfig extends AbstractConfig {
 
     /**
      * Method for generating configuration that is required for source connector.
+     *
      * @return - configuration that manipulates source connector.
      */
     public static ConfigDef conf() {
@@ -33,4 +34,13 @@ public class RandomSourceConnectorConfig extends AbstractConfig {
                         LOW, INTERVAL_DOC)
                 ;
     }
+
+    public String getTopic() {
+        return this.getString(TOPIC_CONFIG);
+    }
+
+    public int getInterval() {
+        return this.getInt(INTERVAL);
+    }
+
 }

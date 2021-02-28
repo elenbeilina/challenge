@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.System.currentTimeMillis;
-import static org.app.connector.RandomSourceConnectorConfig.INTERVAL;
-import static org.app.connector.RandomSourceConnectorConfig.TOPIC_CONFIG;
 
 @Slf4j
 public class RandomSourceTask extends SourceTask {
@@ -38,6 +36,7 @@ public class RandomSourceTask extends SourceTask {
      * Kafka is calling that method in loop as quickly as it has capacity for.
      * Here we should be making the calls to the external system.
      * This particularly method generates Star Track characters for the Connect framework.
+     *
      * @return - returning a list of SourceRecords.
      */
     @SneakyThrows
@@ -46,16 +45,17 @@ public class RandomSourceTask extends SourceTask {
                 .setValue(faker.starTrek().character())
                 .build());
 
-        Thread.sleep(config.getInt(INTERVAL));
+        Thread.sleep(config.getInterval());
 
         return Collections.singletonList(sourceRecord);
     }
 
     /**
      * Method for building source record using AvroConverter
-     * @see AvroConverter
+     *
      * @param value - Item value, that we want to send to kafka topic
      * @return - source value
+     * @see AvroConverter
      */
     private SourceRecord buildSourceRecord(ItemValue value) {
         Map<String, Object> sourceOffset = Collections.singletonMap("timestamp", currentTimeMillis());
@@ -63,7 +63,7 @@ public class RandomSourceTask extends SourceTask {
 
         SchemaAndValue schemaAndValue = new AvroConverter<ItemValue>().getSchemaAndValue(value);
 
-        return new SourceRecord(sourcePartition, sourceOffset, config.getString(TOPIC_CONFIG),
+        return new SourceRecord(sourcePartition, sourceOffset, config.getTopic(),
                 schemaAndValue.schema(), schemaAndValue.value());
     }
 }

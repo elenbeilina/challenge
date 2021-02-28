@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.List;
 
-import static org.app.connector.RandomSourceConnectorConfig.TOPIC_CONFIG;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -23,7 +22,7 @@ class RandomSourceTaskTest {
     private Faker faker;
     @Spy
     private final RandomSourceConnectorConfig config =
-            new RandomSourceConnectorConfig(Collections.singletonMap(TOPIC_CONFIG, "main"));
+            new RandomSourceConnectorConfig(Collections.singletonMap("topic", "test"));
     @InjectMocks
     private RandomSourceTask randomSourceTask;
 
@@ -32,7 +31,7 @@ class RandomSourceTaskTest {
         List<SourceRecord> records = randomSourceTask.poll();
 
         assert records.size() == 1;
-        assertEquals(records.get(0).topic(), "main");
+        assertEquals(records.get(0).topic(), "test");
         verify(faker,times(1)).starTrek();
     }
 }
